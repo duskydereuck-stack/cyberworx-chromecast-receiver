@@ -87,6 +87,8 @@
 
   window.CyberWorxTest = { navigate:navigate, action:action, getSection:function(){return tabs[tabIndex];} };
   if (window.location && /(?:\?|&)preview=1(?:&|$)/.test(window.location.search)) {
+    var previewSection = window.location.search.match(/[?&]section=(home|media|devices|settings)(?:&|$)/);
+    if (previewSection) navigate(previewSection[1]);
     text("castStatus", "Browser preview"); text("sdkState", "Preview only"); return;
   }
   if (!window.cast || !window.cast.framework || !window.cast.framework.CastReceiverContext) {

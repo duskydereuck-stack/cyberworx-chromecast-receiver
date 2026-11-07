@@ -8,6 +8,7 @@
   var NS = "urn:x-cast:com.cyberworx.chromecast";
   var castReady = false;
   var context = null;
+  var observedSession = null;
   var status = document.getElementById("status");
   var logBox = document.getElementById("log");
   function setStatus(s) { status.textContent = s; }
@@ -18,7 +19,34 @@
     if (logBox.textContent.length > 4000) logBox.textContent = logBox.textContent.slice(0, 4000);
   }
   function session() {
-    return context ? context.getCurrentSession() : null;
+    var current = context ? context.getCurrentSession() : null;
+    if (!current) {
+      observedSession = null;
+      return null;
+    }
+    if (current !== observedSession) {
+      observedSession = current;
+      if (typeof current.addMessageListener === "function") {
+        try {
+          current.addMessageListener(NS, function (namespace, raw) {
+            var data;
+            try {
+              data = typeof raw === "string" ? JSON.parse(raw) : raw;
+            } catch (err) {
+              appendLog("Ignored malformed receiver response");
+              return;
+            }
+            if (!data || data.type !== "STATE" ||
+                ["home", "media", "devices", "settings"].indexOf(data.section) < 0) return;
+            setStatus("TV confirmed: " + data.section);
+            appendLog("Receiver confirmed: " + data.section + " · " + data.commands + " commands");
+          });
+        } catch (err) {
+          appendLog("Receiver message listener unavailable");
+        }
+      }
+    }
+    return current;
   }
   function onCastReady(available) {
     if (!available || !window.cast || !window.cast.framework || !window.chrome) {
