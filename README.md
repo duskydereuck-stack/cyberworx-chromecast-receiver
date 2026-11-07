@@ -1,11 +1,13 @@
-# CyberWorx Chromecast Custom Web Receiver
+# CyberWorx Chromecast Receiver (development only)
 
-Public static HTML receiver for an experimental Google Cast application.
+This public repository hosts only the experimental Google Cast receiver and its browser-based remote controller.
 
-- This is a normal Google Cast web receiver, **not** replacement Chromecast firmware.
-- Only the receiver webpage is hosted here.
-- Development occurs separately. No source firmware, credentials, or private workstation files are included.
-- Receiver app registration is performed in the Google Cast SDK Developer Console.
-- Receiver SDK: https://developers.google.com/cast/docs/web_receiver
+- Receiver / TV interface: https://duskydereuck-stack.github.io/cyberworx-chromecast-receiver/
+- Browser remote control: https://duskydereuck-stack.github.io/cyberworx-chromecast-receiver/controller.html
+- Browser-only preview: https://duskydereuck-stack.github.io/cyberworx-chromecast-receiver/?preview=1
 
-Google Cast developer registration and an app ID are required to launch this receiver. A receiver's web URL being public does **not** publish the Cast app to all devices.
+Google Cast app ID A35768E5 must remain unpublished during private device testing.
+
+This does NOT unlock or replace Chromecast firmware. No private Beast Linux project files or user secrets are included here.
+
+Reference: https://developers.google.com/cast/docs/web_receiver/core_features

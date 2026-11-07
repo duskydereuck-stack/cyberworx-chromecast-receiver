@@ -1,0 +1,44 @@
+/* Original lightweight receiver design, no third-party fonts or images. */
+:root{color-scheme:dark;font-family:Arial,"Helvetica Neue",sans-serif;background:#0c1626;color:#eff7ff}
+*{box-sizing:border-box}
+html,body{width:100%;height:100%;padding:0;margin:0;overflow:hidden}
+body{background:radial-gradient(circle at 88% 28%,#173c59 0,#0d1c2e 36%,#0a1423 78%)}
+button{font:inherit;color:inherit;cursor:pointer;outline-offset:3px}
+.interface{height:100%;padding:3.5vh 4vw 2.4vh;max-width:1920px;margin:0 auto;display:flex;flex-direction:column;gap:2.2vh}
+.top{display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.brand{display:flex;align-items:center;gap:1.2vw}
+.brand-icon{background:#208cf1;border-radius:14px;padding:13px;color:white;font-size:1.8vw;font-weight:bold;letter-spacing:-2px}
+.brand strong{display:block;font-size:2.2vw;letter-spacing:1.5px}.brand small{font-size:1.02vw;color:#85b8df;font-weight:700;letter-spacing:2px}
+.status{font-size:1.2vw;color:#abc7dc;padding:12px 18px;background:#16283e;border:1px solid #34506d;border-radius:25px}
+.dot{display:inline-block;width:9px;height:9px;margin-right:11px;border-radius:50%;background:#57c8a5}
+.navigation{display:flex;gap:1vw;border-bottom:1px solid #35516e;flex-shrink:0;padding-top:1vh}
+.tab{border:0;border-bottom:3px solid transparent;background:transparent;color:#a2b6cc;padding:1.4vh 2vw;font-size:1.25vw;font-weight:700;letter-spacing:1px}
+.tab.active,.tab:focus{color:#fff;border-bottom-color:#62b4ff}
+.view{display:none;flex:1;min-height:0;overflow:hidden}
+.view.active{display:flex;flex-direction:column;gap:2.3vh}
+.hero{position:relative;flex:1;min-height:0;padding:3.3vh 3vw;overflow:hidden;border-radius:22px;background:linear-gradient(120deg,#162f4a,#203e5b);border:1px solid #426582}
+.hero:after{content:"";position:absolute;width:38vw;height:38vw;right:-9vw;top:-14vw;border-radius:50%;border:3px solid #2e648c;box-shadow:0 0 0 6vw #1a3854}
+.eyebrow{font-size:1vw;font-weight:bold;letter-spacing:2px;color:#79c5ff;position:relative;z-index:1}
+.hero h1{font-size:4.6vw;line-height:1.04;margin:2vh 0 1.9vh;position:relative;z-index:1;max-width:65%}
+.hero h1 span{color:#7dc4ff}
+.hero p{font-size:1.43vw;color:#bfdaef;line-height:1.45;position:relative;z-index:1}
+.subnote{position:absolute;bottom:3vh;left:3vw;font-size:1vw;font-weight:700;color:#80bce5;z-index:1}
+.tiles{display:flex;gap:1.6vw;flex-shrink:0;min-height:0}
+.tile{flex:1;min-width:0;min-height:17vh;text-align:left;border-radius:17px;background:#14273b;border:1px solid #385875;padding:2vh 2vw;display:flex;flex-direction:column;align-items:flex-start;gap:1vh}
+.tile strong{font-size:1.7vw}.tile small{font-size:1.08vw;color:#abc1d6}
+.tile-icon{font-size:2.4vw;color:#70beff;line-height:1}
+button.tile.selected,button.tile:focus{border-color:#75bdff;background:#1c3956;box-shadow:inset 0 0 0 2px #408fd9}
+.section-header{padding:3vh 0 1vh;flex-shrink:0}
+.section-header h2{font-size:3.4vw;line-height:1.1;margin:1vh 0 1vh}
+.section-header p{font-size:1.5vw;color:#b6cee1}
+.wide-panel{flex:1;min-height:0;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;background:#14273b;border:1px solid #385875;border-radius:20px;padding:3vh}
+.wide-panel .big-icon{font-size:4vw;color:#8bc9ff}
+.wide-panel h3{font-size:2.2vw;margin:1vh}
+.wide-panel p{font-size:1.3vw;max-width:60vw;line-height:1.5;color:#abc1d6}
+.tiles.details{flex:1;align-items:stretch}.tiles.details .tile{justify-content:center}
+.details-panel{background:#14273b;border:1px solid #385875;border-radius:20px;flex:1;padding:2vh 3vw;display:flex;flex-direction:column;justify-content:space-around}
+.details-panel>div{display:flex;justify-content:space-between;font-size:1.35vw;gap:2vw;border-bottom:1px solid #314a64;padding:1.4vh 0}
+.details-panel>div span{color:#93aec8}.details-panel>div strong{font-weight:600}
+.footer{font-size:.95vw;color:#95acc4;display:flex;justify-content:space-between;gap:15px;flex-shrink:0}
+cast-media-player{display:none;position:absolute;inset:0;z-index:20}
+@media(max-width:700px){.interface{gap:2vh}.brand-icon{border-radius:8px;padding:9px}.status{padding:6px 8px}.hero{padding:2vh 3vw}.hero h1{font-size:5vw}.tiles{gap:8px}.tile{padding:10px;min-height:15vh}.tile strong{font-size:2vw}.tile small{font-size:1.35vw}}

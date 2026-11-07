@@ -1,53 +1,62 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"/>
-  <title>CyberWorx Chromecast — Experimental Cast Receiver</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <style>
-    html, body {margin:0;width:100%;height:100%;background:#0e1828;color:#eef5fc;font-family:Arial,sans-serif;}
-    .screen{box-sizing:border-box;width:100%;height:100%;padding:3vw;overflow:hidden;background:linear-gradient(120deg,#0e1828,#1b3554);}
-    header{border:1px solid #34516c;background:#142236;border-radius:14px;padding:18px 28px;letter-spacing:2px;font-size:25px;font-weight:bold;}
-    header small {font-size:12px;color:#8ac8ff;display:block;margin-top:6px;letter-spacing:1px;}
-    .hero{margin-top:24px;padding:36px;background:#1b304d;border:1px solid #496787;border-radius:18px;}
-    h1 {font-size:4.6vw;margin:4px 0 12px;} p{font-size:1.8vw;color:#b1cbe4;}
-    .grid{display:flex;gap:20px;margin-top:24px;} section{flex:1;padding:25px;border:1px solid #36506d;background:#17293d;border-radius:16px;min-width:0;}
-    h2{font-size:2vw;margin:0 0 15px;} .status{font-size:1.4vw;color:#8ac8ff;}
-    footer{color:#92a5ba;margin-top:27px;font-size:1.2vw;}
-    cast-media-player{position:absolute;inset:0;display:none;}
-  </style>
-  <script src="//www.gstatic.com/cast/sdk/libs/caf_receiver/v3/cast_receiver_framework.js"></script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0c1626">
+<title>CyberWorx Chromecast OS — Cast Receiver</title>
+<link rel="stylesheet" href="app.css">
+<script src="https://www.gstatic.com/cast/sdk/libs/caf_receiver/v3/cast_receiver_framework.js"></script>
 </head>
 <body>
-  <div class="screen" id="home">
-    <header>CYBERWORX<small>CHROMECAST — CUSTOM RECEIVER EXPERIMENT</small></header>
-    <div class="hero">
-      <p>CAST APPLICATION PROTOTYPE</p>
-      <h1>Your TV. Your interface.</h1>
-      <p>Custom HTML receiver, hosted separately from the Chromecast firmware</p>
-    </div>
-    <div class="grid">
-      <section><h2>MEDIA</h2><div class="status">Waiting for cast content</div></section>
-      <section><h2>CONNECTIVITY</h2><div class="status">Google Cast receiver</div></section>
-      <section><h2>LINUX OS</h2><div class="status">Developed separately on Beast</div></section>
-    </div>
-    <footer>Registered receiver app ID required · Not replacement firmware</footer>
+<main id="interface" class="interface">
+ <div class="top">
+  <div class="brand"><span class="brand-icon">CW</span><span><strong>CYBERWORX</strong><small>CHROMECAST RECEIVER</small></span></div>
+  <div class="status"><span class="dot"></span><span id="castStatus">Receiver starting</span></div>
+ </div>
+ <div class="navigation" role="navigation" aria-label="Sections">
+  <button class="tab active" data-tab="home" type="button">HOME</button>
+  <button class="tab" data-tab="media" type="button">MEDIA</button>
+  <button class="tab" data-tab="devices" type="button">DEVICES</button>
+  <button class="tab" data-tab="settings" type="button">SETTINGS</button>
+ </div>
+ <section class="view active" id="view-home" data-view="home">
+  <div class="hero"><span class="eyebrow">CYBERWORX CAST LAB · V0.4</span>
+   <h1>Your TV.<br><span>Your interface.</span></h1>
+   <p>Our custom receiver running on Google Cast.<br>The independent Linux OS remains a separate project.</p>
+   <span class="subnote">Designed for Chromecast Gen 1</span>
   </div>
-  <cast-media-player></cast-media-player>
-  <script>
-    (function(){
-      // Standard CAF receiver initialization. Requires registered receiver app,
-      // a real HTTPS host, and verification of original Chromecast compatibility.
-      if (!window.cast || !window.cast.framework) return;
-      var context=window.cast.framework.CastReceiverContext.getInstance();
-      var player=context.getPlayerManager();
-      player.addEventListener(window.cast.framework.events.EventType.MEDIA_STATUS, function(ev){
-        var hasMedia=!!(ev && ev.mediaStatus && ev.mediaStatus.media);
-        document.getElementById('home').style.display=hasMedia?'none':'block';
-        document.querySelector('cast-media-player').style.display=hasMedia?'block':'none';
-      });
-      context.start();
-    })();
-  </script>
+  <div class="tiles">
+   <button data-open="media" class="tile selected"><span class="tile-icon">▶</span><strong>Media</strong><small>Playback experiments</small></button>
+   <button data-open="devices" class="tile"><span class="tile-icon">⌘</span><strong>Devices</strong><small>Cast connection information</small></button>
+   <button data-open="settings" class="tile"><span class="tile-icon">⚙</span><strong>Settings</strong><small>Receiver test information</small></button>
+  </div>
+ </section>
+ <section class="view" id="view-media" data-view="media">
+  <div class="section-header"><span class="eyebrow">MEDIA</span><h2>Playback centre</h2><p>Ready for future media controls. No stream is playing.</p></div>
+  <div class="wide-panel"><div class="big-icon">▶</div><h3>Your media, on your TV</h3><p>The custom receiver is prepared to support sender-initiated media. For this lab build we are verifying navigation and control messages first.</p></div>
+ </section>
+ <section class="view" id="view-devices" data-view="devices">
+  <div class="section-header"><span class="eyebrow">DEVICES</span><h2>Connectivity</h2><p>Google Cast remote control and the independent Linux project.</p></div>
+  <div class="tiles details">
+   <div class="tile"><span class="tile-icon">◉</span><strong>Google Cast</strong><small>Remote messages over the local network</small></div>
+   <div class="tile"><span class="tile-icon">⌁</span><strong>Wi-Fi</strong><small>Managed by stock Chromecast firmware</small></div>
+   <div class="tile"><span class="tile-icon">◫</span><strong>Beast</strong><small>Separate ARM Linux development lab</small></div>
+  </div>
+ </section>
+ <section class="view" id="view-settings" data-view="settings">
+  <div class="section-header"><span class="eyebrow">SYSTEM</span><h2>Receiver diagnostics</h2><p>Safe test application. No firmware changes.</p></div>
+  <div class="details-panel">
+   <div><span>Receiver version</span><strong>0.4 — experimental</strong></div>
+   <div><span>Cast application ID</span><strong>A35768E5</strong></div>
+   <div><span>Custom message channel</span><strong>com.cyberworx.chromecast</strong></div>
+   <div><span>Receiver framework</span><strong id="sdkState">Checking</strong></div>
+   <div><span>Current section</span><strong id="sectionState">Home</strong></div>
+  </div>
+ </section>
+ <div class="footer"><span id="activity">Waiting for a Cast controller</span><span>NOT REPLACEMENT FIRMWARE · SAFE DEVELOPMENT BUILD</span></div>
+</main>
+<cast-media-player id="mediaPlayer"></cast-media-player>
+<script src="receiver.js"></script>
 </body>
 </html>

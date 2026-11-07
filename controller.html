@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0c1626">
+<title>CyberWorx Chromecast — Remote Control</title>
+<link rel="stylesheet" href="controller.css">
+</head>
+<body>
+<div class="remote">
+ <header>
+   <div class="brand"><div class="logo">CW</div><div><strong>CYBERWORX</strong><span>CHROMECAST REMOTE · V0.4</span></div></div>
+   <div class="badge" id="status">Checking Cast availability…</div>
+ </header>
+ <section class="intro"><span class="eyebrow">PRIVATE CAST TEST APP</span><h1>Control your TV.</h1>
+  <p>Connect to the registered Chromecast and navigate the CyberWorx receiver. This is a Google Cast web app, not a replacement operating system.</p>
+  <div class="buttons">
+    <google-cast-launcher id="castLauncher"></google-cast-launcher>
+    <button id="connect" class="primary" type="button">Connect to Chromecast</button>
+    <button id="disconnect" class="secondary" type="button">Disconnect</button>
+  </div>
+ </section>
+ <div class="control">
+   <section class="panel">
+    <h2>Sections</h2>
+    <div class="tabs">
+     <button class="navbtn" data-open="home" type="button">⌂ Home</button>
+     <button class="navbtn" data-open="media" type="button">▶ Media</button>
+     <button class="navbtn" data-open="devices" type="button">⌁ Devices</button>
+     <button class="navbtn" data-open="settings" type="button">⚙ Settings</button>
+    </div>
+    <h2 class="spaced">Navigation</h2>
+    <div class="arrows">
+     <button id="left" data-action="LEFT" type="button">◀</button>
+     <button id="select" data-action="SELECT" type="button">OK</button>
+     <button id="right" data-action="RIGHT" type="button">▶</button>
+     <button id="home" data-action="HOME" type="button">Home</button>
+    </div>
+   </section>
+   <section class="panel preview">
+    <h2>Receiver preview</h2>
+    <div class="frame"><iframe title="CyberWorx receiver preview" src="index.html?preview=1" loading="lazy"></iframe></div>
+    <p>This preview runs in your browser, not on the Chromecast. Use Connect to launch the actual receiver.</p>
+   </section>
+ </div>
+ <section class="log">
+  <div><strong>Connection log</strong><button id="clear" type="button">Clear</button></div>
+  <pre id="log">No commands sent.</pre>
+ </section>
+ <footer>Google Cast application A35768E5 · Chromecast test receiver · No firmware operations</footer>
+</div>
+<script src="controller.js"></script>
+<script src="https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1"></script>
+</body></html>
