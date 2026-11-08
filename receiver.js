@@ -30,10 +30,20 @@
   function mediaStatus(event) {
     var status = event && event.mediaStatus ? event.mediaStatus : null;
     if (!status) return;
-    var playing = !!(status.media && status.playerState !== "IDLE");
-    // The player may report mediaPlayerState independently of status.playerState.
-    if (status.playerState === "IDLE" || status.idleReason) playing = false;
-    setMediaVisible(playing);
+    // Old Chromecast Gen 1 omits the media object from many otherwise
+    // valid BUFFERING/PLAYING updates. Visibility must follow playerState
+    // alone, not the optional media metadata payload.
+    var playerState = status.playerState;
+    if (playerState === "PLAYING" || playerState === "BUFFERING" ||
+        playerState === "PAUSED") {
+      setMediaVisible(true);
+    } else if (playerState === "IDLE" || status.idleReason) {
+      setMediaVisible(false);
+    } else {
+      // Ignore malformed/incomplete status instead of hiding a valid video.
+      return;
+    }
+    var playing = mediaVisible;
     text("playerStatus", playing ? "Media " + String(status.playerState || "loaded") : "No media loaded");
   }
 
@@ -101,7 +111,7 @@
     if (context && event.senderId) {
       try {
         context.sendCustomMessage(namespace, event.senderId, {
-          type: "STATE", section: tabs[tabIndex], commands: messagesHandled, version: "0.5.2", mediaVisible: mediaVisible
+          type: "STATE", section: tabs[tabIndex], commands: messagesHandled, version: "0.5.3", mediaVisible: mediaVisible
         });
       } catch (err) { /* older Cast receivers may not support state replies */ }
     }
