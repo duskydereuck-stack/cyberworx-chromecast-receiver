@@ -79,12 +79,21 @@
     if (type.length > 24) return;
     var accepted = action(type, data);
     if (!accepted) return;
+    // A status request also reconciles the UI with the actual CAF player
+    // state. It fixes a stale overlay if an older Chromecast missed a
+    // final MEDIA_STATUS broadcast.
+    if (type === "PING" && context && context.getPlayerManager) {
+      try {
+        var currentState = context.getPlayerManager().getPlayerState();
+        if (currentState === "IDLE") setMediaVisible(false);
+      } catch (err) { /* older CAF versions may not expose state here */ }
+    }
     messagesHandled++;
     text("activity", "Viewing " + tabs[tabIndex] + " · " + messagesHandled + " remote commands");
     if (context && event.senderId) {
       try {
         context.sendCustomMessage(namespace, event.senderId, {
-          type: "STATE", section: tabs[tabIndex], commands: messagesHandled, version: "0.5", mediaVisible: mediaVisible
+          type: "STATE", section: tabs[tabIndex], commands: messagesHandled, version: "0.5.1", mediaVisible: mediaVisible
         });
       } catch (err) { /* older Cast receivers may not support state replies */ }
     }
@@ -120,6 +129,15 @@
     var fw = window.cast.framework;
     if (playerManager && fw.events && fw.events.EventType) {
       playerManager.addEventListener(fw.events.EventType.MEDIA_STATUS, mediaStatus);
+      // MEDIA_STATUS alone is not guaranteed to be emitted with a final
+      // IDLE status on older Cast firmware. MEDIA_FINISHED is the primary
+      // completion signal for normal end, STOP and playback errors.
+      if (fw.events.EventType.MEDIA_FINISHED) {
+        playerManager.addEventListener(fw.events.EventType.MEDIA_FINISHED, function () {
+          setMediaVisible(false);
+          text("playerStatus", "Playback ended — ready for another video");
+        });
+      }
     }
     if (playerManager && fw.messages && fw.messages.MessageType) {
       playerManager.setMessageInterceptor(fw.messages.MessageType.LOAD, function (request) {
