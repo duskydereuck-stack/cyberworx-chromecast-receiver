@@ -10,7 +10,7 @@
 <body>
 <div class="remote">
  <header>
-   <div class="brand"><div class="logo">CW</div><div><strong>CYBERWORX</strong><span>CHROMECAST REMOTE · V0.4</span></div></div>
+   <div class="brand"><div class="logo">CW</div><div><strong>CYBERWORX</strong><span>CHROMECAST REMOTE · V0.5</span></div></div>
    <div class="badge" id="status">Checking Cast availability…</div>
  </header>
  <section class="intro"><span class="eyebrow">PRIVATE CAST TEST APP</span><h1>Control your TV.</h1>
@@ -44,6 +44,19 @@
     <p>This preview runs in your browser, not on the Chromecast. Use Connect to launch the actual receiver.</p>
    </section>
  </div>
+ <section class="media-remote" aria-label="Media playback controls">
+  <div class="media-header">
+   <div><span class="eyebrow">MEDIA TEST</span><h2>CyberWorx video playback</h2><p>Original 12-second silent video · H.264 MP4 · designed for Chromecast Gen 1</p></div>
+   <span class="media-tag">V0.5</span>
+  </div>
+  <div class="media-actions">
+   <button id="playDemo" class="primary" type="button">▶ Play demo video</button>
+   <button id="pauseResume" class="secondary" type="button">⏯ Pause / Resume</button>
+   <button id="stopMedia" class="secondary" type="button">■ Stop</button>
+  </div>
+  <div class="media-progress"><progress id="mediaProgress" value="0" max="100"></progress><span id="mediaTime">00:00 / 00:12</span></div>
+  <div id="playbackStatus" class="media-status">Connect to Chromecast to test playback</div>
+ </section>
  <section class="log">
   <div><strong>Connection log</strong><button id="clear" type="button">Clear</button></div>
   <pre id="log">No commands sent.</pre>

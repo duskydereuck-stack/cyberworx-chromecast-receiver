@@ -11,7 +11,7 @@
 <body>
 <main id="interface" class="interface">
  <div class="top">
-  <div class="brand"><span class="brand-icon">CW</span><span><strong>CYBERWORX</strong><small>CHROMECAST RECEIVER</small></span></div>
+  <div class="brand"><span class="brand-icon">CW</span><span><strong>CYBERWORX</strong><small>CHROMECAST RECEIVER V0.5</small></span></div>
   <div class="status"><span class="dot"></span><span id="castStatus">Receiver starting</span></div>
  </div>
  <div class="navigation" role="navigation" aria-label="Sections">
@@ -21,7 +21,7 @@
   <button class="tab" data-tab="settings" type="button">SETTINGS</button>
  </div>
  <section class="view active" id="view-home" data-view="home">
-  <div class="hero"><span class="eyebrow">CYBERWORX CAST LAB · V0.4</span>
+  <div class="hero"><span class="eyebrow">CYBERWORX CAST LAB · V0.5</span>
    <h1>Your TV.<br><span>Your interface.</span></h1>
    <p>Our custom receiver running on Google Cast.<br>The independent Linux OS remains a separate project.</p>
    <span class="subnote">Designed for Chromecast Gen 1</span>
@@ -33,8 +33,8 @@
   </div>
  </section>
  <section class="view" id="view-media" data-view="media">
-  <div class="section-header"><span class="eyebrow">MEDIA</span><h2>Playback centre</h2><p>Ready for future media controls. No stream is playing.</p></div>
-  <div class="wide-panel"><div class="big-icon">▶</div><h3>Your media, on your TV</h3><p>The custom receiver is prepared to support sender-initiated media. For this lab build we are verifying navigation and control messages first.</p></div>
+  <div class="section-header"><span class="eyebrow">MEDIA</span><h2>Playback centre</h2><p>Stream media from the CyberWorx remote. The original 12-second test clip is ready.</p></div>
+  <div class="wide-panel"><div class="big-icon">▶</div><h3>Ready for playback</h3><p>Use the CyberWorx remote to start the test clip. Media decoding and playback are handled by the official Google Cast receiver framework.</p><p id="playerStatus">No media loaded</p></div>
  </section>
  <section class="view" id="view-devices" data-view="devices">
   <div class="section-header"><span class="eyebrow">DEVICES</span><h2>Connectivity</h2><p>Google Cast remote control and the independent Linux project.</p></div>
@@ -47,7 +47,7 @@
  <section class="view" id="view-settings" data-view="settings">
   <div class="section-header"><span class="eyebrow">SYSTEM</span><h2>Receiver diagnostics</h2><p>Safe test application. No firmware changes.</p></div>
   <div class="details-panel">
-   <div><span>Receiver version</span><strong>0.4 — experimental</strong></div>
+   <div><span>Receiver version</span><strong>0.5 — experimental</strong></div>
    <div><span>Cast application ID</span><strong>A35768E5</strong></div>
    <div><span>Custom message channel</span><strong>com.cyberworx.chromecast</strong></div>
    <div><span>Receiver framework</span><strong id="sdkState">Checking</strong></div>

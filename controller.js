@@ -1,4 +1,4 @@
-/* CyberWorx Google Cast sender (custom app A35768E5).
+/* CyberWorx Google Cast sender v0.5 (custom app A35768E5).
  * No device firmware operations. All commands use an allowlisted custom
  * namespace and are sent only after a valid user-initiated Cast session.
  */
@@ -9,6 +9,27 @@
   var castReady = false;
   var context = null;
   var observedSession = null;
+  var remotePlayer = null;
+  var remotePlayerController = null;
+  var DEMO_URL = "https://duskydereuck-stack.github.io/cyberworx-chromecast-receiver/cyberworx-demo.mp4";
+
+  function formatSeconds(value) {
+    var seconds = Math.max(0, Math.floor(Number(value) || 0));
+    return String(Math.floor(seconds / 60)).padStart(2, "0") + ":" + String(seconds % 60).padStart(2, "0");
+  }
+  function updatePlaybackStatus() {
+    if (!remotePlayer) return;
+    var loaded = !!remotePlayer.isMediaLoaded;
+    var state = loaded ? (remotePlayer.isPaused ? "Paused" : "Playing") : "No media loaded";
+    var p = document.getElementById("playbackStatus");
+    if (p) p.textContent = state;
+    var progress = document.getElementById("mediaProgress");
+    var total = Number(remotePlayer.duration) || 0;
+    var current = Number(remotePlayer.currentTime) || 0;
+    if (progress) progress.value = total > 0 ? Math.min(100, Math.round(current / total * 100)) : 0;
+    var label = document.getElementById("mediaTime");
+    if (label) label.textContent = formatSeconds(current) + " / " + formatSeconds(total || 12);
+  }
   var status = document.getElementById("status");
   var logBox = document.getElementById("log");
   function setStatus(s) { status.textContent = s; }
@@ -56,6 +77,13 @@
     try {
       context = cast.framework.CastContext.getInstance();
       context.setOptions({ receiverApplicationId:APP_ID, autoJoinPolicy:chrome.cast.AutoJoinPolicy.ORIGIN_SCOPED });
+      if (cast.framework.RemotePlayer && cast.framework.RemotePlayerController) {
+        remotePlayer = new cast.framework.RemotePlayer();
+        remotePlayerController = new cast.framework.RemotePlayerController(remotePlayer);
+        if (remotePlayerController.addEventListener && cast.framework.RemotePlayerEventType) {
+          remotePlayerController.addEventListener(cast.framework.RemotePlayerEventType.ANY_CHANGE, updatePlaybackStatus);
+        }
+      }
       context.addEventListener(cast.framework.CastContextEventType.SESSION_STATE_CHANGED, function (event) {
         appendLog("Cast session: " + event.sessionState);
         setStatus(session() ? "Chromecast session connected" : "Ready to connect");
@@ -112,6 +140,46 @@
     var type = {"ArrowLeft":"LEFT","ArrowRight":"RIGHT","Enter":"SELECT","Escape":"HOME"}[ev.key];
     if (type && session()) {ev.preventDefault();send(type);}
   });
+  document.getElementById("playDemo").addEventListener("click", function () {
+    var active = session();
+    if (!active) return appendLog("Connect to Chromecast before playing media.");
+    if (!window.chrome || !chrome.cast || !chrome.cast.media) {
+      return appendLog("Chrome Cast Media SDK is not available.");
+    }
+    try {
+      var info = new chrome.cast.media.MediaInfo(DEMO_URL, "video/mp4");
+      info.streamType = chrome.cast.media.StreamType.BUFFERED;
+      if (chrome.cast.media.GenericMediaMetadata) {
+        info.metadata = new chrome.cast.media.GenericMediaMetadata();
+        info.metadata.title = "CyberWorx original playback test";
+      }
+      var request = new chrome.cast.media.LoadRequest(info);
+      request.autoplay = true;
+      var label = document.getElementById("playbackStatus");
+      if (label) label.textContent = "Loading demo clip...";
+      active.loadMedia(request).then(
+        function () { appendLog("Video LOAD accepted by Chromecast"); updatePlaybackStatus(); },
+        function (err) { appendLog("Video LOAD failed: " + String(err)); if (label) label.textContent = "Playback failed"; }
+      );
+    } catch (err) { appendLog("Could not create media request: " + String(err)); }
+  });
+  document.getElementById("pauseResume").addEventListener("click", function () {
+    if (!session()) return appendLog("Connect to Chromecast before controlling media.");
+    if (!remotePlayerController || !remotePlayer || !remotePlayer.isMediaLoaded) {
+      return appendLog("No media loaded to pause or resume.");
+    }
+    try { remotePlayerController.playOrPause(); appendLog("Sent Pause / Resume"); }
+    catch (err) { appendLog("Pause / Resume failed: " + String(err)); }
+  });
+  document.getElementById("stopMedia").addEventListener("click", function () {
+    if (!session()) return appendLog("Connect to Chromecast before controlling media.");
+    if (!remotePlayerController || !remotePlayer || !remotePlayer.isMediaLoaded) {
+      return appendLog("No media loaded to stop.");
+    }
+    try { remotePlayerController.stop(); appendLog("Sent Stop playback"); }
+    catch (err) { appendLog("Stop failed: " + String(err)); }
+  });
+
   document.getElementById("clear").addEventListener("click", function () {
     logBox.textContent = "No commands sent.";
   });

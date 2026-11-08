@@ -1,4 +1,4 @@
-/* CyberWorx Chromecast Cast receiver v0.4.
+/* CyberWorx Chromecast Cast receiver v0.5.
  * All inputs are allowlisted. There is no firmware, shell or device-control API.
  * Google Cast CAF custom-message API:
  * https://developers.google.com/cast/docs/web_receiver/core_features
@@ -11,6 +11,23 @@
   var tileIndex = 0;
   var messagesHandled = 0;
   var context = null;
+  var mediaVisible = false;
+  function setMediaVisible(visible) {
+    mediaVisible = !!visible;
+    var overlay = document.getElementById("mediaPlayer");
+    var home = document.getElementById("interface");
+    if (overlay) overlay.style.display = mediaVisible ? "block" : "none";
+    if (home) home.style.display = mediaVisible ? "none" : "flex";
+  }
+  function mediaStatus(event) {
+    var status = event && event.mediaStatus ? event.mediaStatus : null;
+    if (!status) return;
+    var playing = !!(status.media && status.playerState !== "IDLE");
+    // The player may report mediaPlayerState independently of status.playerState.
+    if (status.playerState === "IDLE" || status.idleReason) playing = false;
+    setMediaVisible(playing);
+    text("playerStatus", playing ? "Media " + String(status.playerState || "loaded") : "No media loaded");
+  }
 
   function text(id, value) {
     var element = document.getElementById(id);
@@ -67,7 +84,7 @@
     if (context && event.senderId) {
       try {
         context.sendCustomMessage(namespace, event.senderId, {
-          type: "STATE", section: tabs[tabIndex], commands: messagesHandled, version: "0.4"
+          type: "STATE", section: tabs[tabIndex], commands: messagesHandled, version: "0.5", mediaVisible: mediaVisible
         });
       } catch (err) { /* older Cast receivers may not support state replies */ }
     }
@@ -99,6 +116,20 @@
   try {
     context = window.cast.framework.CastReceiverContext.getInstance();
     context.addCustomMessageListener(namespace, receiverMessage);
+    var playerManager = context.getPlayerManager();
+    var fw = window.cast.framework;
+    if (playerManager && fw.events && fw.events.EventType) {
+      playerManager.addEventListener(fw.events.EventType.MEDIA_STATUS, mediaStatus);
+    }
+    if (playerManager && fw.messages && fw.messages.MessageType) {
+      playerManager.setMessageInterceptor(fw.messages.MessageType.LOAD, function (request) {
+        if (request && request.media) {
+          setMediaVisible(true);
+          text("playerStatus", "Loading media...");
+        }
+        return request;
+      });
+    }
     context.start();
     text("castStatus", "Receiver online");
     text("sdkState", "Ready");
