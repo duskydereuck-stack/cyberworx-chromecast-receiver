@@ -40,5 +40,5 @@ button.tile.selected,button.tile:focus{border-color:#75bdff;background:#1c3956;b
 .details-panel>div{display:flex;justify-content:space-between;font-size:1.35vw;gap:2vw;border-bottom:1px solid #314a64;padding:1.4vh 0}
 .details-panel>div span{color:#93aec8}.details-panel>div strong{font-weight:600}
 .footer{font-size:.95vw;color:#95acc4;display:flex;justify-content:space-between;gap:15px;flex-shrink:0}
-cast-media-player{display:block;position:fixed;inset:0;width:100vw;height:100vh;visibility:hidden;z-index:0;pointer-events:none}
+cast-media-player{display:block;position:fixed;top:0;left:0;right:0;bottom:0;width:100vw;height:100vh;visibility:hidden;z-index:0;pointer-events:none}
 @media(max-width:700px){.interface{gap:2vh}.brand-icon{border-radius:8px;padding:9px}.status{padding:6px 8px}.hero{padding:2vh 3vw}.hero h1{font-size:5vw}.tiles{gap:8px}.tile{padding:10px;min-height:15vh}.tile strong{font-size:2vw}.tile small{font-size:1.35vw}}
