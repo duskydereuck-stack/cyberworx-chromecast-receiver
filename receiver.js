@@ -16,7 +16,15 @@
     mediaVisible = !!visible;
     var overlay = document.getElementById("mediaPlayer");
     var home = document.getElementById("interface");
-    if (overlay) overlay.style.display = mediaVisible ? "block" : "none";
+    // The CAF <cast-media-player> must ALWAYS remain laid out. Using
+    // display:none collapses its internal video to 0x0 pixels on Gen 1:
+    // audio/video plays, but the TV only shows our blue background.
+    // Visibility changes do not remove it from layout.
+    if (overlay) {
+      overlay.style.display = "block";
+      overlay.style.visibility = mediaVisible ? "visible" : "hidden";
+      overlay.style.zIndex = mediaVisible ? "20" : "0";
+    }
     if (home) home.style.display = mediaVisible ? "none" : "flex";
   }
   function mediaStatus(event) {
@@ -93,7 +101,7 @@
     if (context && event.senderId) {
       try {
         context.sendCustomMessage(namespace, event.senderId, {
-          type: "STATE", section: tabs[tabIndex], commands: messagesHandled, version: "0.5.1", mediaVisible: mediaVisible
+          type: "STATE", section: tabs[tabIndex], commands: messagesHandled, version: "0.5.2", mediaVisible: mediaVisible
         });
       } catch (err) { /* older Cast receivers may not support state replies */ }
     }
@@ -129,6 +137,20 @@
     var fw = window.cast.framework;
     if (playerManager && fw.events && fw.events.EventType) {
       playerManager.addEventListener(fw.events.EventType.MEDIA_STATUS, mediaStatus);
+      // Old Chromecast can omit the expected MEDIA_STATUS on initial load.
+      // Listen to the actual player lifecycle as well as status messages.
+      if (fw.events.EventType.PLAYER_LOADING) {
+        playerManager.addEventListener(fw.events.EventType.PLAYER_LOADING, function () {
+          setMediaVisible(true);
+          text("playerStatus", "Loading media...");
+        });
+      }
+      if (fw.events.EventType.PLAYING) {
+        playerManager.addEventListener(fw.events.EventType.PLAYING, function () {
+          setMediaVisible(true);
+          text("playerStatus", "Media playing");
+        });
+      }
       // MEDIA_STATUS alone is not guaranteed to be emitted with a final
       // IDLE status on older Cast firmware. MEDIA_FINISHED is the primary
       // completion signal for normal end, STOP and playback errors.
@@ -148,6 +170,9 @@
         return request;
       });
     }
+    // Make the Cast video surface a real 1280x720 layout box before
+    // starting the player, even while the dashboard is visible.
+    setMediaVisible(false);
     context.start();
     text("castStatus", "Receiver online");
     text("sdkState", "Ready");
