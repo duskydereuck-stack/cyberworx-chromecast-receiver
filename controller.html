@@ -10,10 +10,10 @@
 <body>
 <div class="remote">
  <header>
-   <div class="brand"><div class="logo">CW</div><div><strong>CYBERWORX</strong><span>CHROMECAST REMOTE · V0.5</span></div></div>
+   <div class="brand"><div class="logo">CW</div><div><strong>CYBERWORX</strong><span>CHROMECAST REMOTE · V0.6.0</span></div></div>
    <div class="badge" id="status">Checking Cast availability…</div>
  </header>
- <section class="intro"><span class="eyebrow">PRIVATE CAST TEST APP</span><h1>Control your TV.</h1>
+ <section class="intro"><span class="eyebrow">CYBERWORX MEDIA HUB</span><h1>Control your TV.</h1>
   <p>Connect to the registered Chromecast and navigate the CyberWorx receiver. This is a Google Cast web app, not a replacement operating system.</p>
   <div class="buttons">
     <google-cast-launcher id="castLauncher"></google-cast-launcher>
@@ -47,7 +47,7 @@
  <section class="media-remote" aria-label="Media playback controls">
   <div class="media-header">
    <div><span class="eyebrow">MEDIA TEST</span><h2>CyberWorx video playback</h2><p>Original 12-second silent video · H.264 MP4 · designed for Chromecast Gen 1</p></div>
-   <span class="media-tag">V0.5</span>
+   <span class="media-tag">V0.6.0</span>
   </div>
   <div class="media-actions">
    <button id="playDemo" class="primary" type="button">▶ Play demo video</button>
@@ -56,6 +56,11 @@
   </div>
   <div class="media-progress"><progress id="mediaProgress" value="0" max="100"></progress><span id="mediaTime">00:00 / 00:12</span></div>
   <div id="playbackStatus" class="media-status">Connect to Chromecast to test playback</div>
+ </section>
+ <section class="media-remote media-sources" aria-label="Media sources">
+  <div class="media-header"><div><span class="eyebrow">PLEX · YOUTUBE · NETFLIX</span><h2>Media sources</h2><p>Plex on Tower is controlled by Home Assistant. YouTube and Netflix use their official mobile/Chrome Cast senders.</p></div><span class="media-tag">CAST</span></div>
+  <div class="media-actions"><a class="source-link" href="http://homeassistant.local:8123/lovelace/media" target="_blank" rel="noopener noreferrer">Open Home Assistant Media</a></div>
+  <p class="source-note">This link opens Home Assistant on your phone or computer, not directly on the TV. You must be on your home network. If homeassistant.local does not resolve, open your usual Home Assistant address. Netflix requires a compatible subscription and its official app. The Chromecast Gen 1 does not install Android applications.</p>
  </section>
  <section class="log">
   <div><strong>Connection log</strong><button id="clear" type="button">Clear</button></div>

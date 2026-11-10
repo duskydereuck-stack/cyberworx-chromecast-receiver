@@ -1,4 +1,4 @@
-/* CyberWorx Chromecast Cast receiver v0.5.
+/* CyberWorx Chromecast Cast receiver v0.6.0.
  * All inputs are allowlisted. There is no firmware, shell or device-control API.
  * Google Cast CAF custom-message API:
  * https://developers.google.com/cast/docs/web_receiver/core_features
@@ -111,7 +111,7 @@
     if (context && event.senderId) {
       try {
         context.sendCustomMessage(namespace, event.senderId, {
-          type: "STATE", section: tabs[tabIndex], commands: messagesHandled, version: "0.5.3", mediaVisible: mediaVisible
+          type: "STATE", section: tabs[tabIndex], commands: messagesHandled, version: "0.6.0", mediaVisible: mediaVisible
         });
       } catch (err) { /* older Cast receivers may not support state replies */ }
     }

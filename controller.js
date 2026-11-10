@@ -1,4 +1,4 @@
-/* CyberWorx Google Cast sender v0.5 (custom app A35768E5).
+/* CyberWorx Google Cast sender v0.6.0 (custom app A35768E5).
  * No device firmware operations. All commands use an allowlisted custom
  * namespace and are sent only after a valid user-initiated Cast session.
  */
